@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -14,69 +14,69 @@ body {
   text-align: center;
 }
 
+/* MAIN CONTAINER */
 .container {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 /* TITLE */
 h2 {
   margin-bottom: 10px;
-  letter-spacing: 1px;
-  text-shadow: 0 0 10px rgba(255,215,0,0.6);
+  text-shadow: 0 0 10px rgba(255,215,0,0.5);
 }
 
-/* WHEEL CANVAS */
+/* WHEEL */
 canvas {
   display: block;
-  margin: auto;
+  margin: 10px auto;
+  max-width: 90vw;
+  height: auto;
   filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
 }
 
-/* BUTTONS */
+/* BUTTON GROUP */
+.buttons {
+  margin-top: 10px;
+}
+
+/* BUTTON */
 button {
-  padding: 12px 18px;
-  margin: 8px;
-  font-size: 15px;
+  padding: 12px 16px;
+  margin: 6px;
+  font-size: 14px;
   border-radius: 10px;
   border: none;
   background: linear-gradient(145deg, gold, orange);
   color: black;
   font-weight: bold;
   box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-  transition: 0.2s;
-}
-
-button:active {
-  transform: scale(0.95);
 }
 
 /* RESULT */
 .result {
-  margin-top: 8px;
-  font-size: 18px;
-  min-height: 24px;
+  margin-top: 10px;
+  font-size: 16px;
+  min-height: 22px;
 }
 
-/* PREMIUM FOOTER */
+/* FOOTER (NO OVERLAP NOW) */
 .footer {
-  position: fixed;
-  bottom: 10px;
-  width: 100%;
-  text-align: center;
+  margin-top: 20px;
   font-size: 13px;
   color: #aaa;
 }
 
 .footer span {
   display: inline-block;
-  padding: 6px 12px;
+  padding: 6px 10px;
   border-radius: 20px;
   background: rgba(255,255,255,0.05);
   backdrop-filter: blur(5px);
-  box-shadow: 0 0 10px rgba(255,215,0,0.2);
 }
 
 .footer b {
@@ -87,33 +87,32 @@ button:active {
   color: gold;
   text-decoration: none;
 }
-
-.footer a:hover {
-  text-decoration: underline;
-}
 </style>
 </head>
 
 <body>
 
 <div class="container">
+
   <h2>🎡 Spin the Wheel</h2>
+
   <canvas id="wheel" width="320" height="320"></canvas>
 
-  <div>
+  <div class="buttons">
     <button onclick="spin()">SPIN</button>
     <button onclick="goFullScreen()">FULL SCREEN</button>
   </div>
 
   <div class="result" id="result"></div>
-</div>
 
-<!-- PREMIUM FOOTER -->
-<div class="footer">
-  <span>
-    👩‍💻 Created by <b>Himanshi (Super Girl)</b> &nbsp;|&nbsp;
-    ⚡ Powered by <a href="https://gowinthe-ai.tech" target="_blank">GoWinThe-ai.tech</a>
-  </span>
+  <!-- CLEAN FOOTER -->
+  <div class="footer">
+    <span>
+      👩‍💻 Created by <b>Himanshi (Super Girl)</b> |
+      ⚡ Powered by <a href="https://gowinthe-ai.tech" target="_blank">GoWinThe-ai.tech</a>
+    </span>
+  </div>
+
 </div>
 
 <script>
@@ -146,7 +145,6 @@ let spinning = false;
 
 const arc = (2 * Math.PI) / segments.length;
 
-/* DRAW WHEEL */
 function drawWheel() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -164,19 +162,19 @@ function drawWheel() {
     ctx.translate(160, 160);
     ctx.rotate(start + arc / 2);
     ctx.fillStyle = "white";
-    ctx.font = "13px sans-serif";
+    ctx.font = "12px sans-serif";
     ctx.textAlign = "right";
-    ctx.fillText(segments[i], 130, 5);
+    ctx.fillText(segments[i], 120, 5);
     ctx.restore();
   }
 
-  /* CENTER */
+  // center
   ctx.beginPath();
   ctx.arc(160, 160, 30, 0, 2 * Math.PI);
   ctx.fillStyle = "gold";
   ctx.fill();
 
-  /* POINTER */
+  // pointer
   ctx.fillStyle = "red";
   ctx.beginPath();
   ctx.moveTo(160, 5);
@@ -185,7 +183,6 @@ function drawWheel() {
   ctx.fill();
 }
 
-/* ANIMATION LOOP */
 function update() {
   if (spinning) {
     angle += velocity;
@@ -202,7 +199,6 @@ function update() {
   requestAnimationFrame(update);
 }
 
-/* SPIN */
 function spin() {
   if (!spinning) {
     velocity = Math.random() * 0.3 + 0.25;
@@ -211,7 +207,6 @@ function spin() {
   }
 }
 
-/* RESULT */
 function showResult() {
   const degrees = (angle * 180 / Math.PI + 90) % 360;
   const index = Math.floor((360 - degrees) / (360 / segments.length)) % segments.length;
@@ -220,10 +215,10 @@ function showResult() {
     "👉 " + segments[index];
 }
 
-/* FULLSCREEN */
 function goFullScreen() {
-  const elem = document.documentElement;
-  if (elem.requestFullscreen) elem.requestFullscreen();
+  if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen();
+  }
 }
 
 update();

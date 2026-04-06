@@ -1,16 +1,16 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spin Wheel</title>
+<title>Spin Wheel Pro</title>
 
 <style>
 body {
   margin: 0;
-  background: radial-gradient(circle, #1a1a1a, #000);
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at top, #1f1f1f, #000);
   color: white;
-  font-family: Arial, sans-serif;
   text-align: center;
 }
 
@@ -21,24 +21,75 @@ body {
   height: 100vh;
 }
 
+/* TITLE */
+h2 {
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(255,215,0,0.6);
+}
+
+/* WHEEL CANVAS */
 canvas {
   display: block;
   margin: auto;
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
 }
 
+/* BUTTONS */
 button {
   padding: 12px 18px;
-  margin: 10px;
-  font-size: 16px;
-  border-radius: 8px;
+  margin: 8px;
+  font-size: 15px;
+  border-radius: 10px;
   border: none;
-  background: gold;
+  background: linear-gradient(145deg, gold, orange);
+  color: black;
   font-weight: bold;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+  transition: 0.2s;
 }
 
+button:active {
+  transform: scale(0.95);
+}
+
+/* RESULT */
 .result {
-  margin-top: 10px;
+  margin-top: 8px;
   font-size: 18px;
+  min-height: 24px;
+}
+
+/* PREMIUM FOOTER */
+.footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.footer span {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 10px rgba(255,215,0,0.2);
+}
+
+.footer b {
+  color: gold;
+}
+
+.footer a {
+  color: gold;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
 }
 </style>
 </head>
@@ -55,6 +106,14 @@ button {
   </div>
 
   <div class="result" id="result"></div>
+</div>
+
+<!-- PREMIUM FOOTER -->
+<div class="footer">
+  <span>
+    👩‍💻 Created by <b>Himanshi (Super Girl)</b> &nbsp;|&nbsp;
+    ⚡ Powered by <a href="https://gowinthe-ai.tech" target="_blank">GoWinThe-ai.tech</a>
+  </span>
 </div>
 
 <script>
@@ -87,6 +146,7 @@ let spinning = false;
 
 const arc = (2 * Math.PI) / segments.length;
 
+/* DRAW WHEEL */
 function drawWheel() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -104,19 +164,19 @@ function drawWheel() {
     ctx.translate(160, 160);
     ctx.rotate(start + arc / 2);
     ctx.fillStyle = "white";
-    ctx.font = "13px Arial";
+    ctx.font = "13px sans-serif";
     ctx.textAlign = "right";
     ctx.fillText(segments[i], 130, 5);
     ctx.restore();
   }
 
-  // center
+  /* CENTER */
   ctx.beginPath();
   ctx.arc(160, 160, 30, 0, 2 * Math.PI);
   ctx.fillStyle = "gold";
   ctx.fill();
 
-  // pointer
+  /* POINTER */
   ctx.fillStyle = "red";
   ctx.beginPath();
   ctx.moveTo(160, 5);
@@ -125,6 +185,7 @@ function drawWheel() {
   ctx.fill();
 }
 
+/* ANIMATION LOOP */
 function update() {
   if (spinning) {
     angle += velocity;
@@ -141,6 +202,7 @@ function update() {
   requestAnimationFrame(update);
 }
 
+/* SPIN */
 function spin() {
   if (!spinning) {
     velocity = Math.random() * 0.3 + 0.25;
@@ -149,6 +211,7 @@ function spin() {
   }
 }
 
+/* RESULT */
 function showResult() {
   const degrees = (angle * 180 / Math.PI + 90) % 360;
   const index = Math.floor((360 - degrees) / (360 / segments.length)) % segments.length;
@@ -157,6 +220,7 @@ function showResult() {
     "👉 " + segments[index];
 }
 
+/* FULLSCREEN */
 function goFullScreen() {
   const elem = document.documentElement;
   if (elem.requestFullscreen) elem.requestFullscreen();

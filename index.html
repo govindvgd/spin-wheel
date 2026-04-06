@@ -4,13 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spin Wheel - Himanshi (Super Girl)</title>
-    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         html, body {
             height: 100%;
@@ -30,7 +25,6 @@
             width: 100vw;
         }
 
-        /* HEADER */
         .header {
             padding: 15px 20px;
             text-align: center;
@@ -38,6 +32,7 @@
             background: rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
         }
 
         .header h1 {
@@ -54,7 +49,6 @@
             font-weight: 300;
         }
 
-        /* MAIN CONTENT */
         .main-content {
             flex: 1;
             display: flex;
@@ -62,39 +56,56 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            gap: 20px;
-            padding: 20px;
+            gap: 16px;
+            padding: 16px 20px;
             overflow: hidden;
+            min-height: 0;
         }
 
-        /* WHEEL CONTAINER */
         .wheel-wrapper {
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100%;
-            height: auto;
-            max-width: 300px;
-            aspect-ratio: 1 / 1;
+            flex-shrink: 0;
         }
 
         canvas {
-            width: 100%;
-            height: 100%;
+            display: block;
             filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
             border-radius: 50%;
         }
 
-        /* BUTTONS */
+        /* Invisible clickable overlay on the center circle */
+        #centerBtn {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            padding: 0;
+        }
+
+        #centerBtn:disabled {
+            cursor: not-allowed;
+        }
+
         .button-group {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
             justify-content: center;
             width: 100%;
+            flex-shrink: 0;
         }
 
-        button {
+        button.btn-spin, button.btn-fullscreen {
             padding: clamp(10px, 2vw, 15px) clamp(20px, 4vw, 30px);
             font-size: clamp(0.9rem, 2vw, 1.1rem);
             font-weight: 600;
@@ -105,11 +116,11 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            color: white;
         }
 
         .btn-spin {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
         }
 
         .btn-spin:hover:not(:disabled) {
@@ -124,7 +135,6 @@
 
         .btn-fullscreen {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
         }
 
         .btn-fullscreen:hover {
@@ -132,32 +142,25 @@
             box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
         }
 
-        /* RESULT */
         .result-box {
             text-align: center;
-            min-height: 40px;
+            min-height: 36px;
             font-size: clamp(1rem, 3vw, 1.3rem);
             font-weight: 600;
             color: #ffd700;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
             animation: slideIn 0.5s ease;
+            flex-shrink: 0;
         }
 
         @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* FOOTER */
         footer {
             width: 100%;
-            padding: 15px 20px;
+            padding: 12px 20px;
             background: rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -169,6 +172,7 @@
             align-items: center;
             gap: 15px;
             flex-wrap: wrap;
+            flex-shrink: 0;
         }
 
         footer span {
@@ -185,285 +189,231 @@
             border-color: rgba(255, 255, 255, 0.4);
         }
 
-        footer a {
-            color: #ffd700;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: #ffed4e;
-        }
-
-        footer b {
-            color: #ffd700;
-        }
-
-        /* MOBILE RESPONSIVE */
-        @media (max-width: 768px) {
-            .header {
-                padding: 12px 15px;
-            }
-
-            .header h1 {
-                font-size: 1.8rem;
-            }
-
-            .main-content {
-                padding: 15px;
-                gap: 15px;
-            }
-
-            .wheel-wrapper {
-                max-width: 350px;
-            }
-
-            .button-group {
-                gap: 10px;
-            }
-
-            button {
-                padding: 12px 24px;
-                font-size: 0.95rem;
-            }
-
-            footer {
-                padding: 12px 15px;
-                font-size: 0.8rem;
-            }
-        }
+        footer a { color: #ffd700; text-decoration: none; font-weight: 600; transition: color 0.3s ease; }
+        footer a:hover { color: #ffed4e; }
+        footer b { color: #ffd700; }
 
         @media (max-width: 480px) {
-            body {
-                justify-content: space-between;
-            }
-
-            .header {
-                padding: 10px;
-            }
-
-            .header h1 {
-                font-size: 1.5rem;
-                margin-bottom: 3px;
-            }
-
-            .header p {
-                font-size: 0.8rem;
-            }
-
-            .main-content {
-                padding: 10px;
-                gap: 12px;
-            }
-
-            .wheel-wrapper {
-                max-width: 280px;
-            }
-
-            .button-group {
-                gap: 8px;
-            }
-
-            button {
+            .main-content { gap: 10px; padding: 10px; }
+            button.btn-spin, button.btn-fullscreen {
                 padding: 10px 20px;
                 font-size: 0.85rem;
             }
-
-            .result-box {
-                font-size: 1rem;
-                min-height: 35px;
-            }
-
-            footer {
-                padding: 10px;
-                font-size: 0.75rem;
-                gap: 8px;
-            }
-
-            footer span {
-                padding: 4px 10px;
-                font-size: 0.7rem;
-            }
-        }
-
-        :-webkit-full-screen .main-content {
-            padding: 40px;
-        }
-
-        :fullscreen .main-content {
-            padding: 40px;
+            footer { padding: 10px; gap: 8px; font-size: 0.75rem; }
+            footer span { padding: 4px 10px; font-size: 0.7rem; }
         }
     </style>
 </head>
 <body>
-    <!-- HEADER -->
-    <div class="header">
-        <h1>🎡 SPIN THE WHEEL</h1>
-        <p>✨ Test Your Skills & Luck ✨</p>
+
+<div class="header">
+    <h1>🎡 SPIN THE WHEEL</h1>
+    <p>✨ Test Your Skills & Luck ✨</p>
+</div>
+
+<div class="main-content">
+    <div class="wheel-wrapper" id="wheelWrapper">
+        <canvas id="wheel"></canvas>
+        <button id="centerBtn" onclick="spin()" title="Spin the wheel!"></button>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div class="main-content">
-        <!-- WHEEL -->
-        <div class="wheel-wrapper">
-            <canvas id="wheel" width="200" height="200"></canvas>
-        </div>
-
-        <!-- BUTTONS -->
-        <div class="button-group">
-            <button class="btn-spin" id="spinBtn" onclick="spin()">🎯 SPIN NOW</button>
-            <button class="btn-fullscreen" onclick="goFullScreen()">⛶ FULL SCREEN</button>
-        </div>
-
-        <!-- RESULT -->
-        <div class="result-box" id="result"></div>
+    <div class="button-group">
+        <button class="btn-spin" id="spinBtn" onclick="spin()">🎯 SPIN NOW</button>
+        <button class="btn-fullscreen" id="fsBtn" onclick="toggleFullScreen()">⛶ FULL SCREEN</button>
     </div>
 
-    <!-- FOOTER -->
-    <footer>
-        <span>👩‍💻 Created by <b>Himanshi (Super Girl)</b></span>
-        <span>⚡ Powered by <a href="https://gowinthe-ai.tech" target="_blank">GoWinThe-ai.tech</a></span>
-    </footer>
+    <div class="result-box" id="result"></div>
+</div>
 
-    <!-- WHEEL SCRIPT -->
-    <script>
-        const canvas = document.getElementById("wheel");
-        const ctx = canvas.getContext("2d");
-        const spinBtn = document.getElementById("spinBtn");
+<footer>
+    <span>👩‍💻 Created by <b>Himanshi (Super Girl)</b></span>
+    <span>⚡ Powered by <a href="https://gowinthe-ai.tech" target="_blank">GoWinThe-ai.tech</a></span>
+</footer>
 
-        const segments = [
-            "Sing a Brand Jingle 🎤",
-            "Decode a Puzzle 🧩",
-            "Crack a Guesstimate 📊",
-            "Tongue Twister Showdown 👅",
-            "Name 5 Careers in 30s ⏱️",
-            "Decode a Recruiter Logo 🔍",
-            "Network with a Stranger 🤝"
-        ];
+<script>
+    const canvas = document.getElementById("wheel");
+    const ctx = canvas.getContext("2d");
+    const spinBtn = document.getElementById("spinBtn");
+    const centerBtn = document.getElementById("centerBtn");
+    const fsBtn = document.getElementById("fsBtn");
+    const wheelWrapper = document.getElementById("wheelWrapper");
 
-        const colors = [
-            "#FF6B6B",
-            "#4ECDC4",
-            "#45B7D1",
-            "#FFA07A",
-            "#98D8C8",
-            "#F7DC6F",
-            "#BB8FCE"
-        ];
+    const segments = [
+        "Sing a Brand Jingle 🎤",
+        "Decode a Puzzle 🧩",
+        "Crack a Guesstimate 📊",
+        "Tongue Twister Showdown 👅",
+        "Name 5 Careers in 30s ⏱️",
+        "Decode a Recruiter Logo 🔍",
+        "Network with a Stranger 🤝"
+    ];
 
-        let angle = 0;
-        let velocity = 0;
-        let spinning = false;
+    const colors = ["#FF6B6B","#4ECDC4","#45B7D1","#FFA07A","#98D8C8","#F7DC6F","#BB8FCE"];
 
-        const arc = (2 * Math.PI) / segments.length;
+    let angle = 0;
+    let velocity = 0;
+    let spinning = false;
+    let SIZE = 300;
 
-        function drawWheel() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function getSize() {
+        const main = document.querySelector('.main-content');
+        const mainH = main.clientHeight;
+        const mainW = main.clientWidth;
+        const btnH = document.querySelector('.button-group').offsetHeight;
+        const resultH = 40;
+        const gap = 16 * 3;
+        const available = Math.min(mainH - btnH - resultH - gap, mainW - 40);
+        return Math.max(180, Math.min(380, available));
+    }
 
-            // Draw segments
-            for (let i = 0; i < segments.length; i++) {
-                const start = angle + i * arc;
-                const end = start + arc;
+    function resizeCanvas() {
+        SIZE = getSize();
+        canvas.width = SIZE;
+        canvas.height = SIZE;
+        // Center button size = ~27% of canvas (center circle radius fraction)
+        const btnSize = Math.round(SIZE * 0.27);
+        centerBtn.style.width = btnSize + "px";
+        centerBtn.style.height = btnSize + "px";
+        drawWheel();
+    }
 
-                // Segment
-                ctx.beginPath();
-                ctx.moveTo(200, 200);
-                ctx.arc(200, 200, 180, start, end);
-                ctx.lineTo(200, 200);
-                ctx.fillStyle = colors[i];
-                ctx.fill();
+    const arc = (2 * Math.PI) / segments.length;
+    const R = () => SIZE / 2;
 
-                // Border
-                ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
-                ctx.lineWidth = 2;
-                ctx.stroke();
+    function drawWheel() {
+        const r = R();
+        ctx.clearRect(0, 0, SIZE, SIZE);
 
-                // Text
-                ctx.save();
-                ctx.translate(200, 200);
-                ctx.rotate(start + arc / 2);
-                ctx.fillStyle = "white";
-                ctx.font = "bold 13px Arial";
-                ctx.textAlign = "right";
-                ctx.fillText(segments[i], 150, 5);
-                ctx.restore();
-            }
-
-            // Center circle
-            ctx.beginPath();
-            ctx.arc(200, 200, 40, 0, 2 * Math.PI);
-            ctx.fillStyle = "white";
-            ctx.fill();
+        for (let i = 0; i < segments.length; i++) {
+            const start = angle + i * arc;
+            const end = start + arc;
 
             ctx.beginPath();
-            ctx.arc(200, 200, 35, 0, 2 * Math.PI);
-            ctx.fillStyle = "#667eea";
+            ctx.moveTo(r, r);
+            ctx.arc(r, r, r * 0.92, start, end);
+            ctx.lineTo(r, r);
+            ctx.fillStyle = colors[i];
             ctx.fill();
-
-            ctx.fillStyle = "white";
-            ctx.font = "bold 16px Arial";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText("SPIN", 200, 200);
-
-            // Pointer
-            ctx.fillStyle = "#ffd700";
-            ctx.beginPath();
-            ctx.moveTo(200, 20);
-            ctx.lineTo(185, 50);
-            ctx.lineTo(215, 50);
-            ctx.fill();
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+            ctx.strokeStyle = "rgba(255,255,255,0.3)";
             ctx.lineWidth = 2;
             ctx.stroke();
+
+            ctx.save();
+            ctx.translate(r, r);
+            ctx.rotate(start + arc / 2);
+            ctx.fillStyle = "white";
+            const fontSize = Math.max(9, Math.round(SIZE * 0.043));
+            ctx.font = `bold ${fontSize}px Arial`;
+            ctx.textAlign = "right";
+            ctx.shadowColor = "rgba(0,0,0,0.4)";
+            ctx.shadowBlur = 3;
+            ctx.fillText(segments[i], r * 0.85, fontSize * 0.35);
+            ctx.restore();
         }
 
-        function update() {
-            if (spinning) {
-                angle += velocity;
-                velocity *= 0.985;
+        // Outer ring
+        ctx.beginPath();
+        ctx.arc(r, r, r * 0.92, 0, 2 * Math.PI);
+        ctx.strokeStyle = "rgba(255,255,255,0.6)";
+        ctx.lineWidth = 3;
+        ctx.stroke();
 
-                if (velocity < 0.002) {
-                    spinning = false;
-                    velocity = 0;
-                    showResult();
-                    spinBtn.disabled = false;
-                }
+        // Center white ring
+        const cr = r * 0.14;
+        ctx.beginPath();
+        ctx.arc(r, r, cr + 4, 0, 2 * Math.PI);
+        ctx.fillStyle = "white";
+        ctx.fill();
+
+        // Center colored circle
+        ctx.beginPath();
+        ctx.arc(r, r, cr, 0, 2 * Math.PI);
+        ctx.fillStyle = "#667eea";
+        ctx.fill();
+
+        ctx.fillStyle = "white";
+        ctx.shadowColor = "transparent";
+        const spinFontSize = Math.max(9, Math.round(SIZE * 0.055));
+        ctx.font = `bold ${spinFontSize}px Arial`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("SPIN", r, r);
+
+        // Pointer triangle at top
+        const pt = r * 0.06;
+        ctx.fillStyle = "#ffd700";
+        ctx.beginPath();
+        ctx.moveTo(r, r * 0.02);
+        ctx.lineTo(r - pt, r * 0.16);
+        ctx.lineTo(r + pt, r * 0.16);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.6)";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+    }
+
+    function update() {
+        if (spinning) {
+            angle += velocity;
+            velocity *= 0.985;
+            if (velocity < 0.002) {
+                spinning = false;
+                velocity = 0;
+                showResult();
+                setSpinning(false);
             }
-
-            drawWheel();
-            requestAnimationFrame(update);
         }
+        drawWheel();
+        requestAnimationFrame(update);
+    }
 
-        function spin() {
-            if (!spinning) {
-                velocity = Math.random() * 0.3 + 0.25;
-                document.getElementById("result").innerText = "";
-                spinning = true;
-                spinBtn.disabled = true;
-            }
+    function setSpinning(isSpinning) {
+        spinBtn.disabled = isSpinning;
+        centerBtn.disabled = isSpinning;
+    }
+
+    function spin() {
+        if (!spinning) {
+            velocity = Math.random() * 0.3 + 0.25;
+            document.getElementById("result").innerText = "";
+            spinning = true;
+            setSpinning(true);
         }
+    }
 
-        function showResult() {
-            const degrees = (angle * 180 / Math.PI + 90) % 360;
-            const index = Math.floor((360 - degrees) / (360 / segments.length)) % segments.length;
-            document.getElementById("result").innerText = "🎉 " + segments[index];
+    function showResult() {
+        const degrees = (angle * 180 / Math.PI + 90) % 360;
+        const index = Math.floor((360 - degrees) / (360 / segments.length)) % segments.length;
+        document.getElementById("result").innerText = "🎉 " + segments[index];
+    }
+
+    // ── Fullscreen toggle ──────────────────────────────────────────
+    function toggleFullScreen() {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+            const el = document.documentElement;
+            if (el.requestFullscreen) el.requestFullscreen();
+            else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+        } else {
+            if (document.exitFullscreen) document.exitFullscreen();
+            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
         }
+    }
 
-        function goFullScreen() {
-            const elem = document.documentElement;
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen().catch(err => console.log(err));
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                elem.msRequestFullscreen();
-            }
-        }
+    function updateFsButton() {
+        const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+        fsBtn.textContent = isFs ? "✕ EXIT FULL SCREEN" : "⛶ FULL SCREEN";
+    }
 
-        // Start animation loop
-        update();
-    </script>
+    document.addEventListener("fullscreenchange", () => { updateFsButton(); setTimeout(resizeCanvas, 100); });
+    document.addEventListener("webkitfullscreenchange", () => { updateFsButton(); setTimeout(resizeCanvas, 100); });
+
+    // ── Responsive resize ──────────────────────────────────────────
+    window.addEventListener("resize", resizeCanvas);
+
+    // ── Init ───────────────────────────────────────────────────────
+    resizeCanvas();
+    update();
+</script>
 </body>
 </html>
